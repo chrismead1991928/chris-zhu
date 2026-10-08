@@ -103,8 +103,15 @@
 > 开发者名称与联系邮箱会**公开显示**在商店页面上，需与 Play Console 的开发者资料保持一致。
 > 若要修改，三张页面里的同一信息必须一起改。
 
-这三张是纯静态 HTML，可零成本托管（GitHub Pages / Cloudflare Pages / Netlify），不需要买服务器。
-托管步骤见 [`../server/README.md`](../server/README.md)。
+这三张是纯静态 HTML，已通过 GitHub Pages 免费发布。**直接填入下面这个地址**：
+
+```
+https://chrismead1991928.github.io/chris-zhu/privacy.html
+```
+
+三张页面均已在公网验证可访问（隐私政策、服务条款、首页均返回 200，页面之间的跳转链接正常）。
+后续修改 `server/site/` 下的内容并推送到 `main` 分支会自动重新部署，地址不变。
+托管与部署细节见 [`../server/README.md`](../server/README.md)。
 
 ---
 

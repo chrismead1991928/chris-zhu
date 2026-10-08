@@ -32,6 +32,23 @@
 > Play Console 的隐私政策字段接受任意公开可访问的 HTTPS 地址，
 > 不要求域名与应用有任何归属关系，因此 `*.github.io` 这类地址是合规的。
 
+## 已发布地址
+
+站点已通过 GitHub Pages 上线，部署工作流为 `.github/workflows/deploy-pages.yml`：
+
+| 页面 | 线上地址 | 状态 |
+|---|---|---|
+| 隐私政策（填入 Play Console 的就是这个） | https://chrismead1991928.github.io/chris-zhu/privacy.html | 200 |
+| 服务条款 | https://chrismead1991928.github.io/chris-zhu/terms.html | 200 |
+| 站点首页 | https://chrismead1991928.github.io/chris-zhu/ | 200 |
+
+推送 `server/site/` 下的改动到 `main` 分支会自动触发重新部署，无需手动操作。
+工作流只在 `server/site/**` 与该工作流文件本身发生变化时运行，改应用代码不会触发站点重新发布。
+
+> 站点源文件位于 `server/site/` 子目录，而 Pages 内置的「从分支部署」只能指向仓库根目录或 `/docs`，
+> 因此改用 Actions 上传该目录作为发布产物。**不要在 Pages 设置里改回「从分支部署」并选 `/docs`**：
+> `docs/privacy-policy.html` 是一张「已废弃」提示页，会被误当作隐私政策发布出去。
+
 ## 发布前必须替换的占位符
 
 **已全部替换完毕**（12 处），三张页面可以直接发布。当前取值：
