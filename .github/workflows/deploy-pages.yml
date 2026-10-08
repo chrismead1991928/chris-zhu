@@ -29,6 +29,9 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    # 部署只是上传并发布静态文件，正常几十秒内结束。
+    # 不设上限的话，一旦卡在等待 Pages 环境授权，任务会一直挂到 GitHub 默认的 6 小时才失败。
+    timeout-minutes: 10
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
