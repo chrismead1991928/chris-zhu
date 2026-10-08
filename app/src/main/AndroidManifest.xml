@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!--
+        INTERNET 权限由 Google Play Billing 依赖（billing-ktx 6.0+，经其 transport 依赖）合并进
+        最终清单，因此这里显式声明只是为了让权限来源保持可见，删掉也不会真的消失。
+
+        应用自身不发起任何网络请求：菜谱只存在本机数据库，没有任何上传统道。
+        购买/查询已购由 Play 商店进程通过 IPC 完成。
+    -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:name=".RecipeCardsApplication"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.RecipeCards"
+        android:localeConfig="@xml/locales_config"
+        android:enableOnBackInvokedCallback="true"
+        tools:targetApi="34">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.RecipeCards"
+            android:configChanges="locale"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!--
+            分享菜谱长图时，把 cacheDir/shared_cards/ 下的图片授权给接收方应用读取。
+
+            exported="false" 且只开放一个子目录（见 @xml/file_paths）：
+            接收方拿到的是一次性的、限定到具体文件的读取权限，
+            既不需要申请任何存储权限，也不会把应用私有目录暴露出去。
+        -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+    </application>
+
+</manifest>

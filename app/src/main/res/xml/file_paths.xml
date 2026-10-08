@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    分享长图的对外通道。
+
+    长图写在 cacheDir/shared_cards/ 下，通过 FileProvider 授权给接收方应用读取。
+    只开放这一个子目录：FileProvider 的路径条目等同于「允许外借的范围」，
+    范围越窄越安全，绝不要图省事直接开放 cacheDir 或 filesDir 整棵树。
+
+    用 cacheDir 而不是 filesDir 的原因：分享出去的图片属于一次性产物，
+    系统在存储紧张时可以直接回收，不需要应用自己长期兜底。
+-->
+<paths>
+    <cache-path name="recipe_share_images" path="shared_cards/" />
+</paths>
