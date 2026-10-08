@@ -1,0 +1,49 @@
+name: Publish static site to GitHub Pages
+
+# 为什么用 Actions 而不是「从分支部署」：
+# GitHub Pages 内置的分支部署只能选仓库根目录或 /docs 两个位置，
+# 而本项目的站点源文件在 server/site/。若改用 /docs，
+# 会把 docs/ 里并非发布内容的文档一并公开，还可能误serve到旧版隐私政策。
+# 因此这里直接把 server/site/ 作为发布产物上传，源目录保持整洁。
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'server/site/**'
+      - '.github/workflows/deploy-pages.yml'
+  # 允许在网页上手动触发一次发布
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同一时间只保留一个部署任务；新推送会取消进行中的旧任务，
+# 避免两次发布互相覆盖导致线上的页面与提交对不上
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: server/site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
